@@ -1,0 +1,13 @@
+//
+//  Genre.swift
+//  movie-app
+//
+//  Created by Eva Kiraly on 2025. 04. 08..
+//
+
+struct Genre: Identifiable, Hashable, Equatable {
+    let id: Int
+    let name: String
+    
+    
+}
