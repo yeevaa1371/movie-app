@@ -1,7 +1,29 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "DEV" : {
 
+    },
+    "PROD" : {
+
+    },
+    "title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movie app"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Film alkalmazás"
+          }
+        }
+      }
+    }
   },
   "version" : "1.0"
 }

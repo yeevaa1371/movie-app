@@ -10,15 +10,28 @@ import SwiftUI
 class GenreSectionViewModel: ObservableObject {
     @Published var genres: [Genre] = []
     
-    func loadGenres(){
-        self.genres = [
-            Genre(id: 1, name: "Action"),
-            Genre(id: 2, name: "Adventure"),
-            Genre(id: 3, name: "Animation"),
-            Genre(id: 4, name: "Biography"),
-            Genre(id: 5, name: "Comedy"),
-            Genre(id: 6, name: "Crime"),
-        ]
+    private var movieService: MovieServiceProtocol = MovieServiceImpl()
+    
+    func fetchGenres() async{
+        do {
+            let request = FetchGenreRequest()
+            let genres = try await movieService.fetchGenres(req: request)
+            DispatchQueue.main.async {
+                self.genres = genres
+            }
+            
+        } catch {
+            print("ERROR")
+        }
+        
+//        self.genres = [
+//            Genre(id: 1, name: "Action"),
+//            Genre(id: 2, name: "Adventure"),
+//            Genre(id: 3, name: "Animation"),
+//            Genre(id: 4, name: "Biography"),
+//            Genre(id: 5, name: "Comedy"),
+//            Genre(id: 6, name: "Crime"),
+//        ]
     }
     
 }
@@ -27,25 +40,33 @@ struct GenreSectionView: View {
     @StateObject private var viewModel = GenreSectionViewModel()
     
     var body: some View {
+        
         NavigationView{
-            List(viewModel.genres){ genre in
-                HStack{
-                    Text(genre.name)
-                        .font(Fonts.title)
-                        .foregroundStyle(.primary)
-                    Spacer()
-                    Image(.rightArrow)
+            ZStack{
+                VStack{
+                    Image(.redEllipse)
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
+                List(viewModel.genres){ genre in
+                    HStack{
+                        Text(genre.name)
+                            .font(Fonts.title)
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Image(.rightArrow)
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                }
+                .listStyle(.plain)
+                .navigationTitle(Environments.name == .dev ? "DEV" : "PROD")
             }
-            .listStyle(.plain)
-            //            .navigationTitle("genreSection.title")
             
-
         }
         .onAppear{
-            viewModel.loadGenres()
+            Task {
+                await viewModel.fetchGenres()
+            }
+            
         }
     }
 }
