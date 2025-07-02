@@ -6,68 +6,69 @@
 //
 
 import SwiftUI
+import InjectPropertyWrapper
 
-class GenreSectionViewModel: ObservableObject {
-    @Published var genres: [Genre] = []
-    
-    private var movieService: MovieServiceProtocol = MovieServiceImpl()
-    
-    func fetchGenres() async{
-        do {
-            let request = FetchGenreRequest()
-            let genres = try await movieService.fetchGenres(req: request)
-            DispatchQueue.main.async {
-                self.genres = genres
-            }
-            
-        } catch {
-            print("ERROR")
-        }
-        
-//        self.genres = [
-//            Genre(id: 1, name: "Action"),
-//            Genre(id: 2, name: "Adventure"),
-//            Genre(id: 3, name: "Animation"),
-//            Genre(id: 4, name: "Biography"),
-//            Genre(id: 5, name: "Comedy"),
-//            Genre(id: 6, name: "Crime"),
-//        ]
-    }
+protocol GenreSectionViewModelProtocol: ObservableObject {
     
 }
 
+class GenreSectionViewModel: GenreSectionViewModelProtocol {
+    @Published var genres: [Genre] = []
+    
+    @Inject
+    private var movieService: MoviesServiceProtocol
+    
+    func fetchGenres() async {
+        
+        do {
+            let request = FetchGenreRequest()
+            let genres = Environments.name == .tv ? try await movieService.fetchTVGenres(req: request) :
+                                                    try await movieService.fetchGenres(req: request)
+            DispatchQueue.main.async {
+                self.genres = genres
+            }
+        } catch {
+            print("Error fetching genres: \(error)")
+        }
+    }
+}
+
 struct GenreSectionView: View {
+    
     @StateObject private var viewModel = GenreSectionViewModel()
     
     var body: some View {
-        
-        NavigationView{
-            ZStack{
-                VStack{
-                    Image(.redEllipse)
-                }
-                List(viewModel.genres){ genre in
-                    HStack{
+        NavigationView {
+            List(viewModel.genres) { genre in
+                ZStack {
+                    NavigationLink(destination: MovieListView(genre: genre)) {
+                        EmptyView()
+                    }
+                    .opacity(0)
+
+                    HStack {
                         Text(genre.name)
                             .font(Fonts.title)
                             .foregroundStyle(.primary)
                         Spacer()
                         Image(.rightArrow)
                     }
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
+                    
                 }
-                .listStyle(.plain)
-                .navigationTitle(Environments.name == .dev ? "DEV" : "PROD")
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
             }
+            .listStyle(.plain)
+            .navigationTitle(Environments.name == .tv ? "TV" : "genreSection.title")
             
         }
-        .onAppear{
+        .onAppear {
             Task {
                 await viewModel.fetchGenres()
             }
             
         }
+        
     }
 }
 
