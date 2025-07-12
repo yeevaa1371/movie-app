@@ -11,13 +11,25 @@ import Foundation
 
 class ViewModelAssembly: Assembly {
     func assemble(container: Container) {
-        container.register((any MovieListViewModelProtocol).self) { _ in
-            return MovieListViewModel()
+        container.register((any MediaItemListViewModelProtocol).self) { _ in
+            return MediaItemListViewModel()
         }.inObjectScope(.transient)
         
-        container.register((any GenreSectionViewModelProtocol).self) { _ in
-            return GenreSectionViewModel()
+        container.register((any GenreSectionViewModel).self) { _ in
+            return GenreSectionViewModelImpl()
         }.inObjectScope(.container)
+        
+        container.register((any SearchViewModelProtocol).self) { _ in
+            return SearchViewModel()
+        }.inObjectScope(.transient)
+        
+        container.register((any FavoritesViewModelProtocol).self) { _ in
+            return FavoritesViewModel()
+        }.inObjectScope(.transient)
+        
+        container.register((any SettingsViewModelProtocol).self) { _ in
+            return SettingsViewModel()
+        }.inObjectScope(.transient)
     }
 }
 
