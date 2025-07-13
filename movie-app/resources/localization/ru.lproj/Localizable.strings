@@ -21,6 +21,7 @@
 "detail.overview" = "Синопсис";
 "detail.publishers" = "Издатели и компании";
 "detail.cast" = "Актерский состав";
+"detail.similars" = "Похожие";
 "available" = "Доступно";
 "unavailable" = "Недоступно";
 "noInternet" = "Нет подключения к интернету";
@@ -31,7 +32,7 @@
 "settings.chooseLanguage" = "Выбрать язык";
 "settings.chooseTheme" = "Выбрать тему";
 "settings.lang.english" = "Английский";
-"settings.lang.russian" = "Немецкий";
+"settings.lang.russian" = "Русский";
 "settings.lang.hungarian" = "Венгерский";
 "settings.theme.light" = "Светлая тема";
 "settings.theme.dark" = "Темная тема";

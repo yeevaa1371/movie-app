@@ -16,6 +16,14 @@ enum Config {
         }
         return token
     }()
+//    private static let accountID: Int = {
+//        guard let path = Bundle.main.path(forResource: "Config", ofType: "plist"),
+//              let dict = NSDictionary(contentsOfFile: path),
+//              let token = dict["ACCOUNT_ID"] as? String else {
+//            preconditionFailure("Config.plist file or API_TOKEN not found")
+//        }
+//        return
+//    }()
     
     static var bearerToken: String {
         "Bearer \(apiToken)"

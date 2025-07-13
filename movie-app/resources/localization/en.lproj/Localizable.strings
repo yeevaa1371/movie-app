@@ -7,7 +7,7 @@
 */
 
 "genreSection.title" = "Movie app";
-"search.empty.title" = "Kezdj el gépelni\na kereséshez";
+"search.empty.title" = "Start typing\nto search";
 "search.textfield.placeholder" = "Movies, Director, Actor, Actress, etc.";
 "button.close.text" = "Close";
 "unexpected.error.title" = "Unexpected Error";
@@ -23,6 +23,7 @@
 "detail.cast" = "Cast";
 "detail.topReviews" = "Top Reviews";
 "detail.noReviews" = "No reviews";
+"detail.similars" = "Similar";
 "available" = "Available";
 "unavailable" = "Unavailable";
 "noInternet" = "No internet connection";

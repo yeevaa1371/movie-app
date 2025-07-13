@@ -30,10 +30,13 @@ protocol MovieRepository {
     func fetchCastMemberDetail(req: FetchCastMemberDetailRequest) -> AnyPublisher<CastDetail, MovieError>
     func fetchCompanyDetail(req: FetchCastMemberDetailRequest) -> AnyPublisher<CastDetail, MovieError>
     func addReview(req: AddReviewRequest) -> AnyPublisher<ModifyMediaResult, MovieError>
+    func fetchSimilarMovies(req: FetchMediaItemSimilarRequest) -> AnyPublisher<[MediaItem], MovieError>
+    func fetchSimilarTVs(req: FetchMediaItemSimilarRequest) -> AnyPublisher<[MediaItem], MovieError>
+    
 }
 
 class MovieRepositoryImpl: MovieRepository {
-    
+        
     @Inject
     var moya: MoyaProvider<MultiTarget>!
     
@@ -99,6 +102,21 @@ class MovieRepositoryImpl: MovieRepository {
             transform: { MediaItemPage(dto: $0) }
         )
     }
+    
+    func fetchSimilarMovies(req: FetchMediaItemSimilarRequest) -> AnyPublisher<[MediaItem], MovieError> {
+        requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchSimilarMovies(req: req)),
+            decodeTo: MoviePageResponse.self,
+            transform: {$0.results.map(MediaItem.init(dto:))})
+    }
+    
+    func fetchSimilarTVs(req: FetchMediaItemSimilarRequest) -> AnyPublisher<[MediaItem], MovieError> {
+        requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchSimilarMovies(req: req)),
+            decodeTo: MoviePageResponse.self,
+            transform: {$0.results.map(MediaItem.init(dto:))})
+    }
+
     
     func fetchCastMemberDetail(req: FetchCastMemberDetailRequest) -> AnyPublisher<CastDetail, MovieError> {
         requestAndTransform(
@@ -358,6 +376,7 @@ class MovieRepositoryImpl: MovieRepository {
             })
             .eraseToAnyPublisher()
     }
+    
 }
 
 extension MoyaError {
