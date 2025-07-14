@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ACCOUNT_ID</key>
+	<integer>22141382</integer>
+	<key>API_TOKEN</key>
+	<string>eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NjgxY2JkYTkzNDIwMjZmMDlmMTYyMmJmZTZlNDhmMSIsIm5iZiI6MTc1MjMzMjA1Mi4yNzcsInN1YiI6IjY4NzI3NzE0NDhiZWE5ZDJkMDU0MjEwMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.X_t7jPYlk_kPf-437uL2z1nl1pbX6UoKsrl_JiFiZgg</string>
+</dict>
+</plist>

@@ -6,50 +6,52 @@
 //
 
 import SwiftUI
-
-class GenreSectionViewModel: ObservableObject {
-    @Published var genres: [Genre] = []
-    
-    func loadGenres(){
-        self.genres = [
-            Genre(id: 1, name: "Action"),
-            Genre(id: 2, name: "Adventure"),
-            Genre(id: 3, name: "Animation"),
-            Genre(id: 4, name: "Biography"),
-            Genre(id: 5, name: "Comedy"),
-            Genre(id: 6, name: "Crime"),
-        ]
-    }
-    
-}
+import InjectPropertyWrapper
 
 struct GenreSectionView: View {
-    @StateObject private var viewModel = GenreSectionViewModel()
+    @StateObject private var viewModel = GenreSectionViewModelImpl()
     
     var body: some View {
-        NavigationView{
-            List(viewModel.genres){ genre in
-                HStack{
-                    Text(genre.name)
-                        .font(Fonts.title)
-                        .foregroundStyle(.primary)
-                    Spacer()
-                    Image(.rightArrow)
+        let title = Environments.name == .tv ? "TV" : "genreSection.title".localized()
+        NavigationView {
+            ZStack {
+                RedEllipse()
+                List {
+                    if let motd = viewModel.motdMovie {
+                        GenreMotdCell(mediaItem: motd)
+                            .background(Color.clear)
+                            .listStyle(.plain)
+                    }
+                    
+                    ForEach(viewModel.genres) { genre in
+                        ZStack {
+                            NavigationLink(destination: MediaItemListView(genre: genre)) {
+                                EmptyView()
+                            }
+                            .opacity(0)
+                            
+                            GenreSectionCell(
+                                genre: genre,
+                                movies: viewModel.movies[genre.id] ?? [],
+                                onExpand: {
+                                    viewModel.loadMovies(for: genre)
+                                }
+                            )
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                    }
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
+                .listStyle(.plain)
+                .navigationTitle(title)
+                .accessibilityLabel(AccessibilityLabels.genreSectionCollectionView)
             }
-            .listStyle(.plain)
-            //            .navigationTitle("genreSection.title")
             
-
         }
+        .showAlert(model: $viewModel.alertModel)
         .onAppear{
             viewModel.loadGenres()
+            viewModel.genresAppeared()
         }
     }
-}
-
-#Preview {
-    GenreSectionView()
 }
